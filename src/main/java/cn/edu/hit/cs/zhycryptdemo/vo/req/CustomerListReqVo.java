@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CustomerListReqVo extends BaseReq {
     private String name;
-    private int incomeMin;
-    private int incomeMax;
-    private int outcomeMin;
-    private int outcomeMax;
+    private Integer incomeMin;
+    private Integer incomeMax;
+    private Integer outcomeMin;
+    private Integer outcomeMax;
 }

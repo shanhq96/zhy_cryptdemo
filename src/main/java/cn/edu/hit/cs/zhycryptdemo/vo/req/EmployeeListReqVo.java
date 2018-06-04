@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class EmployeeListReqVo extends BaseReq {
     private String employeeid;
     private String name;
-    private int incomeMin;
-    private int incomeMax;
-    private int sumIncomeMin;
-    private int sumIncomeMax;
+    private Integer incomeMin;
+    private Integer incomeMax;
+    private Integer sumIncomeMin;
+    private Integer sumIncomeMax;
 }

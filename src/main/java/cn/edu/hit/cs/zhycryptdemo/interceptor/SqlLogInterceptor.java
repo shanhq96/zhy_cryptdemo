@@ -1,8 +1,8 @@
 package cn.edu.hit.cs.zhycryptdemo.interceptor;
 
 import cn.edu.hit.cs.zhycryptdemo.common.AESUtils;
+import cn.edu.hit.cs.zhycryptdemo.common.PaillierUtils;
 import cn.edu.hit.cs.zhycryptdemo.model.EmployeeEnc2;
-import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeAddReqVo;
 import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeListReqVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
@@ -16,6 +16,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Properties;
 
@@ -30,6 +31,11 @@ public class SqlLogInterceptor implements Interceptor {
     static int PARAMETER_INDEX = 1;
     static int ROWBOUNDS_INDEX = 2;
     static int RESULT_HANDLER_INDEX = 3;
+    private static PaillierUtils paillierUtils;
+
+    static {
+        paillierUtils = new PaillierUtils();
+    }
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -57,11 +63,15 @@ public class SqlLogInterceptor implements Interceptor {
                 if (originalSql.contains("employee_enc2")) {
                     EmployeeEnc2 tempParameter = (EmployeeEnc2) parameter;
                     tempParameter.setNameEnc(AESUtils.encrypt(tempParameter.getNameEnc()));
+                    tempParameter.setAgeHom(paillierUtils.Encryption(new BigInteger(tempParameter.getAgeEnc())));
                     tempParameter.setAgeEnc(AESUtils.encrypt(tempParameter.getAgeEnc()));
                     tempParameter.setTelEnc(AESUtils.encrypt(tempParameter.getTelEnc()));
                     tempParameter.setIdnumberEnc(AESUtils.encrypt(tempParameter.getIdnumberEnc()));
+                    tempParameter.setIncomeHom(paillierUtils.Encryption(new BigInteger(tempParameter.getIncomeEnc())));
                     tempParameter.setIncomeEnc(AESUtils.encrypt(tempParameter.getIncomeEnc()));
+                    tempParameter.setMonthHom(paillierUtils.Encryption(new BigInteger(tempParameter.getMonthEnc())));
                     tempParameter.setMonthEnc(AESUtils.encrypt(tempParameter.getMonthEnc()));
+                    tempParameter.setOutcomeHom(paillierUtils.Encryption(new BigInteger(tempParameter.getOutcomeEnc())));
                     tempParameter.setOutcomeEnc(AESUtils.encrypt(tempParameter.getOutcomeEnc()));
                     parameter = tempParameter;
                 }
@@ -96,6 +106,10 @@ public class SqlLogInterceptor implements Interceptor {
                 if (originalSql.contains("employee_enc2")) {
                     List<EmployeeEnc2> employeeEnc2List = (List<EmployeeEnc2>) returnValue;
                     employeeEnc2List.forEach(o -> {
+
+                                log.debug("age {}", paillierUtils.Decryption(o.getAgeHom()));
+                                log.debug("income {}", paillierUtils.Decryption(o.getIncomeHom()));
+
                                 o.setNameEnc(AESUtils.decrypt(o.getNameEnc()));
                                 o.setAgeEnc(AESUtils.decrypt(o.getAgeEnc()));
                                 o.setTelEnc(AESUtils.decrypt(o.getTelEnc()));
@@ -103,6 +117,7 @@ public class SqlLogInterceptor implements Interceptor {
                                 o.setIncomeEnc(AESUtils.decrypt(o.getIncomeEnc()));
                                 o.setMonthEnc(AESUtils.decrypt(o.getMonthEnc()));
                                 o.setOutcomeEnc(AESUtils.decrypt(o.getOutcomeEnc()));
+
                             }
                     );
                     returnValue = employeeEnc2List;
