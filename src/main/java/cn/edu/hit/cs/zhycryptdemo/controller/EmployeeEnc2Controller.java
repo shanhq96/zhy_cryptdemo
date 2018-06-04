@@ -1,10 +1,14 @@
 package cn.edu.hit.cs.zhycryptdemo.controller;
 
 import cn.edu.hit.cs.zhycryptdemo.service.CustomerEnc1Service;
+import cn.edu.hit.cs.zhycryptdemo.service.EmployeeEnc2Service;
 import cn.edu.hit.cs.zhycryptdemo.utils.ValidUtil;
 import cn.edu.hit.cs.zhycryptdemo.vo.req.CustomerAddReqVo;
 import cn.edu.hit.cs.zhycryptdemo.vo.req.CustomerListReqVo;
+import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeAddReqVo;
+import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeListReqVo;
 import cn.edu.hit.cs.zhycryptdemo.vo.res.CustomerListResVo;
+import cn.edu.hit.cs.zhycryptdemo.vo.res.EmployeeListResVo;
 import cn.edu.hit.cs.zhycryptdemo.vo.res.JsonResponse;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -19,43 +23,43 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("customer")
-public class CustomerEnc1Controller {
+@RequestMapping("employee")
+public class EmployeeEnc2Controller {
 
     @Autowired
-    private CustomerEnc1Service customerEnc1Service;
+    private EmployeeEnc2Service employeeEnc2Service;
 
     @RequestMapping("list")
-    public JsonResponse list(final @RequestBody @Validated CustomerListReqVo req, final BindingResult bindingResult) {
+    public JsonResponse list(final @RequestBody @Validated EmployeeListReqVo req, final BindingResult bindingResult) {
         JsonResponse res = null;
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);
             if (validRes != null) {
                 res = new JsonResponse<>(validRes);
             } else {
-                List<CustomerListResVo> customerListResVoList = this.customerEnc1Service.listByPage(req);
-                res = new JsonResponse(customerListResVoList);
+                List<EmployeeListResVo> employeeListResVoList = this.employeeEnc2Service.listByPage(req);
+                res = new JsonResponse(employeeListResVoList);
             }
         } finally {
-            log.debug("customer.list : req [{}] , res [{}]", JSONObject.toJSONString(req), JSONObject.toJSONString(res));
+            log.debug("employee.list : req [{}] , res [{}]", JSONObject.toJSONString(req), JSONObject.toJSONString(res));
         }
         return res;
     }
 
 
     @RequestMapping("add")
-    public JsonResponse insert(final @RequestBody @Validated CustomerAddReqVo req, final BindingResult bindingResult) {
+    public JsonResponse insert(final @RequestBody @Validated EmployeeAddReqVo req, final BindingResult bindingResult) {
         JsonResponse res = null;
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);
             if (validRes != null) {
                 res = new JsonResponse<>(validRes);
             } else {
-                int ic = this.customerEnc1Service.insert(req);
+                int ic = this.employeeEnc2Service.insert(req);
                 res = new JsonResponse(ic);
             }
         } finally {
-            log.debug("customer.add : req [{}] , res [{}]", JSONObject.toJSONString(req), JSONObject.toJSONString(res));
+            log.debug("employee.add : req [{}] , res [{}]", JSONObject.toJSONString(req), JSONObject.toJSONString(res));
         }
         return res;
     }

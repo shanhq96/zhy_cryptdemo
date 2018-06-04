@@ -1,6 +1,9 @@
 package cn.edu.hit.cs.zhycryptdemo.interceptor;
 
-import cn.edu.hit.cs.zhycryptdemo.model.CustomerEnc1;
+import cn.edu.hit.cs.zhycryptdemo.common.AESUtils;
+import cn.edu.hit.cs.zhycryptdemo.model.EmployeeEnc2;
+import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeAddReqVo;
+import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeListReqVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -10,6 +13,8 @@ import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Properties;
@@ -18,7 +23,7 @@ import java.util.Properties;
 @Intercepts({
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
-// @Component
+@Component
 public class SqlLogInterceptor implements Interceptor {
 
     static int MAPPED_STATEMENT_INDEX = 0;// 这是对应上面的args的序号
@@ -32,27 +37,47 @@ public class SqlLogInterceptor implements Interceptor {
         final Object[] queryArgs = invocation.getArgs();
         final MappedStatement mappedStatement = (MappedStatement) queryArgs[MAPPED_STATEMENT_INDEX];
         Object parameter = queryArgs[PARAMETER_INDEX];
+        BoundSql boundSql = mappedStatement.getBoundSql(parameter);
+
+        String originalSql = boundSql.getSql();
+
 
         switch (mappedStatement.getSqlCommandType()) {
             case SELECT:
+                if (originalSql.contains("employee_enc2")) {
+                    EmployeeListReqVo tempParameter = (EmployeeListReqVo) parameter;
+                    if (!StringUtils.isEmpty(tempParameter.getName())) {
+                        tempParameter.setName(AESUtils.encrypt(tempParameter.getName()));
+                    }
+                    parameter = tempParameter;
+                }
                 break;
             case INSERT:
             case UPDATE:
-                ((CustomerEnc1) parameter).setNameEnc("dlt");
+                if (originalSql.contains("employee_enc2")) {
+                    EmployeeEnc2 tempParameter = (EmployeeEnc2) parameter;
+                    tempParameter.setNameEnc(AESUtils.encrypt(tempParameter.getNameEnc()));
+                    tempParameter.setAgeEnc(AESUtils.encrypt(tempParameter.getAgeEnc()));
+                    tempParameter.setTelEnc(AESUtils.encrypt(tempParameter.getTelEnc()));
+                    tempParameter.setIdnumberEnc(AESUtils.encrypt(tempParameter.getIdnumberEnc()));
+                    tempParameter.setIncomeEnc(AESUtils.encrypt(tempParameter.getIncomeEnc()));
+                    tempParameter.setMonthEnc(AESUtils.encrypt(tempParameter.getMonthEnc()));
+                    tempParameter.setOutcomeEnc(AESUtils.encrypt(tempParameter.getOutcomeEnc()));
+                    parameter = tempParameter;
+                }
                 break;
             default:
                 break;
         }
 
+        boundSql = mappedStatement.getBoundSql(parameter);
 
-        final BoundSql boundSql = mappedStatement.getBoundSql(parameter);
-
-        String originalSql = boundSql.getSql();
         String newSql = originalSql;
-        if (originalSql.contains("name")) {
-            newSql = originalSql.replace("name", "name_enc");
+        /*if (originalSql.contains("employee_enc2")){
+            newSql = replaceEmployeeEnc2SelectSql(originalSql);
         }
-        log.debug("\noriginalSql \n {} ; \nnewSql \n {}", originalSql, newSql);
+
+        log.debug("\noriginalSql \n {} ; \nnewSql \n {}", originalSql, newSql);*/
         // 重新new一个查询语句对像
         BoundSql newBoundSql = new BoundSql(mappedStatement.getConfiguration(), newSql, boundSql.getParameterMappings(), boundSql.getParameterObject());
         // 把新的查询放到statement里
@@ -68,12 +93,20 @@ public class SqlLogInterceptor implements Interceptor {
         log.debug("returnValue Class : {}", returnValue.getClass());
         switch (mappedStatement.getSqlCommandType()) {
             case SELECT:
-                // fixme
-                List<CustomerEnc1> customerEnc1s = (List<CustomerEnc1>) returnValue;
-                for (CustomerEnc1 c : customerEnc1s) {
-                    c.setNameEnc(c.getNameEnc() + "_addzhy");
+                if (originalSql.contains("employee_enc2")) {
+                    List<EmployeeEnc2> employeeEnc2List = (List<EmployeeEnc2>) returnValue;
+                    employeeEnc2List.forEach(o -> {
+                                o.setNameEnc(AESUtils.decrypt(o.getNameEnc()));
+                                o.setAgeEnc(AESUtils.decrypt(o.getAgeEnc()));
+                                o.setTelEnc(AESUtils.decrypt(o.getTelEnc()));
+                                o.setIdnumberEnc(AESUtils.decrypt(o.getIdnumberEnc()));
+                                o.setIncomeEnc(AESUtils.decrypt(o.getIncomeEnc()));
+                                o.setMonthEnc(AESUtils.decrypt(o.getMonthEnc()));
+                                o.setOutcomeEnc(AESUtils.decrypt(o.getOutcomeEnc()));
+                            }
+                    );
+                    returnValue = employeeEnc2List;
                 }
-                returnValue = customerEnc1s;
                 break;
             case INSERT:
             case UPDATE:
@@ -126,4 +159,17 @@ public class SqlLogInterceptor implements Interceptor {
             return boundSql;
         }
     }
+
+    /*private String replaceEmployeeEnc2SelectSql(String originalSql) {
+        String newSql = originalSql
+                .replaceAll(",name,", ",name_enc,")
+                .replaceAll("and name LIKE", "and name_enc LIKE")
+                .replaceAll(",age,", ",age_enc,")
+                .replaceAll(",tel,", ",tel_enc,")
+                .replaceAll(",idnumber,", ",idnumber_enc,")
+                .replaceAll(",income,", ",income_enc,")
+                .replaceAll(",month,", ",month_enc,")
+                .replaceAll(",outcome,", ",outcome_enc,");
+        return newSql;
+    }*/
 }

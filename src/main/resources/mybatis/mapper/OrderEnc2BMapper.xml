@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.hit.cs.zhycryptdemo.mapper.OrderEnc2BMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.hit.cs.zhycryptdemo.model.OrderEnc2B">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="orderid" jdbcType="VARCHAR" property="orderid"/>
+        <result column="customername_enc" jdbcType="VARCHAR" property="customernameEnc"/>
+        <result column="employeeid" jdbcType="VARCHAR" property="employeeid"/>
+        <result column="productid" jdbcType="VARCHAR" property="productid"/>
+        <result column="price_enc" jdbcType="VARCHAR" property="priceEnc"/>
+        <result column="price_hom" jdbcType="BIGINT" property="priceHom"/>
+        <result column="cost_enc" jdbcType="VARCHAR" property="costEnc"/>
+        <result column="cost_hom" jdbcType="BIGINT" property="costHom"/>
+        <result column="number_enc" jdbcType="VARCHAR" property="numberEnc"/>
+        <result column="number_hom" jdbcType="BIGINT" property="numberHom"/>
+        <result column="userid" jdbcType="VARCHAR" property="userid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id,orderid,customername_enc,employeeid,productid,price_enc,price_hom,cost_enc,cost_hom,number_enc,number_hom,userid
+    </sql>
+
+    <!--手动添加-->
+    <select id="listByPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `order_enc2_b`
+    </select>
+
+    <insert id="insert" parameterType="Object">
+        insert into `order_enc2_b` (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=INTEGER},
+        #{orderid,jdbcType=VARCHAR},
+        #{customernameEnc,jdbcType=VARCHAR},
+        #{employeeid,jdbcType=VARCHAR},
+        #{productid,jdbcType=VARCHAR},
+        #{priceEnc,jdbcType=VARCHAR},
+        #{priceHom,jdbcType=BIGINT},
+        #{costEnc,jdbcType=VARCHAR},
+        #{costHom,jdbcType=BIGINT},
+        #{numberEnc,jdbcType=VARCHAR},
+        #{numberHom,jdbcType=BIGINT},
+        #{userid,jdbcType=VARCHAR}
+        )
+    </insert>
+
+</mapper>

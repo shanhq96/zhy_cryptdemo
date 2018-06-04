@@ -1,55 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.edu.hit.cs.zhycryptdemo.mapper.CustomerEnc1Mapper">
-    <resultMap id="BaseResultMap" type="cn.edu.hit.cs.zhycryptdemo.model.CustomerEnc1">
+<mapper namespace="cn.edu.hit.cs.zhycryptdemo.mapper.EmployeeEnc2Mapper">
+    <resultMap id="BaseResultMap" type="cn.edu.hit.cs.zhycryptdemo.model.EmployeeEnc2">
         <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="employeeid" jdbcType="VARCHAR" property="employeeid"/>
         <result column="name_enc" jdbcType="VARCHAR" property="nameEnc"/>
         <result column="age_enc" jdbcType="VARCHAR" property="ageEnc"/>
+        <result column="age_hom" jdbcType="VARCHAR" property="ageHom"/>
         <result column="tel_enc" jdbcType="VARCHAR" property="telEnc"/>
         <result column="idnumber_enc" jdbcType="VARCHAR" property="idnumberEnc"/>
         <result column="income_enc" jdbcType="VARCHAR" property="incomeEnc"/>
+        <result column="income_hom" jdbcType="BIGINT" property="incomeHom"/>
+        <result column="month_enc" jdbcType="VARCHAR" property="monthEnc"/>
+        <result column="month_hom" jdbcType="BIGINT" property="monthHom"/>
         <result column="outcome_enc" jdbcType="VARCHAR" property="outcomeEnc"/>
+        <result column="outcome_hom" jdbcType="BIGINT" property="outcomeHom"/>
         <result column="userid" jdbcType="VARCHAR" property="userid"/>
     </resultMap>
     <sql id="Base_Column_List">
-      id,name_enc,age_enc,tel_enc,idnumber_enc,income_enc,outcome_enc,userid
+      id,employeeid,name_enc,age_enc,age_hom,tel_enc,idnumber_enc,income_enc,income_hom,month_enc,month_hom,outcome_enc,outcome_hom,userid
     </sql>
 
+    <!--<sql id="Base_Column_List">
+      id,employeeid,name,age,age_hom,tel,idnumber,income,income_hom,month,month_hom,outcome,outcome_hom,userid
+    </sql>-->
     <!--手动添加-->
     <select id="listByPage" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from `customer_enc1`
+        from `employee_enc2`
         where 1=1
         <if test="name != null and name != ''" >
             and name_enc LIKE CONCAT('%', #{name}, '%')
         </if>
-        <if test="incomeMin != null and incomeMin != ''" >
-            and income_enc &gt;= #{incomeMin}
-        </if>
-        <if test="incomeMax != null and incomeMax != ''" >
-            and income_enc &lt;= #{incomeMax}
-        </if>
-        <if test="outcomeMin != null and outcomeMin != ''" >
-            and outcome_enc &gt;= #{outcomeMin}
-        </if>
-        <if test="outcomeMax != null and outcomeMax != ''" >
-            and outcome_enc &lt;= #{outcomeMax}
-        </if>
     </select>
 
     <insert id="insert" parameterType="Object">
-        insert into `customer_enc1` (
+        insert into `employee_enc2` (
         <include refid="Base_Column_List"/>
         )
         values (
         #{id,jdbcType=INTEGER},
+        #{employeeid,jdbcType=VARCHAR},
         #{nameEnc,jdbcType=VARCHAR},
         #{ageEnc,jdbcType=VARCHAR},
+        #{ageHom,jdbcType=VARCHAR},
         #{telEnc,jdbcType=VARCHAR},
         #{idnumberEnc,jdbcType=VARCHAR},
         #{incomeEnc,jdbcType=VARCHAR},
+        #{incomeHom,jdbcType=BIGINT},
+        #{monthEnc,jdbcType=VARCHAR},
+        #{monthHom,jdbcType=BIGINT},
         #{outcomeEnc,jdbcType=VARCHAR},
+        #{outcomeHom,jdbcType=BIGINT},
         #{userid,jdbcType=VARCHAR}
         )
     </insert>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.hit.cs.zhycryptdemo.mapper.OrderEnc1AMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.hit.cs.zhycryptdemo.model.OrderEnc1A">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="orderid" jdbcType="VARCHAR" property="orderid"/>
+        <result column="customername_enc" jdbcType="VARCHAR" property="customernameEnc"/>
+        <result column="employeeid" jdbcType="VARCHAR" property="employeeid"/>
+        <result column="productid" jdbcType="VARCHAR" property="productid"/>
+        <result column="cost_enc" jdbcType="VARCHAR" property="costEnc"/>
+        <result column="price_enc" jdbcType="VARCHAR" property="priceEnc"/>
+        <result column="number_enc" jdbcType="VARCHAR" property="numberEnc"/>
+        <result column="userid" jdbcType="VARCHAR" property="userid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id,orderid,customername_enc,employeeid,productid,cost_enc,price_enc,number_enc,userid
+    </sql>
+
+    <!--手动添加-->
+    <select id="listByPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `order_enc1_a`
+    </select>
+
+    <insert id="insert" parameterType="Object">
+        insert into `order_enc1_a` (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=INTEGER},
+        #{orderid,jdbcType=VARCHAR},
+        #{customernameEnc,jdbcType=VARCHAR},
+        #{employeeid,jdbcType=VARCHAR},
+        #{productid,jdbcType=VARCHAR},
+        #{costEnc,jdbcType=VARCHAR},
+        #{priceEnc,jdbcType=VARCHAR},
+        #{numberEnc,jdbcType=BIGINT},
+        #{userid,jdbcType=VARCHAR}
+        )
+    </insert>
+
+</mapper>

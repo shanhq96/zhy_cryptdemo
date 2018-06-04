@@ -10,6 +10,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @ToString
 public class BaseReq{
-    @NotNull(message = "用户id为空")
+    @NotNull(message = "userid为空")
     private String userid;
 }

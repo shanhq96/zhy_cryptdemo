@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.hit.cs.zhycryptdemo.mapper.TelEnc3AMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.hit.cs.zhycryptdemo.model.OrderEnc2B">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="employeeid" jdbcType="VARCHAR" property="employeeid"/>
+        <result column="tel_replacement" jdbcType="VARCHAR" property="telReplacement"/>
+        <result column="userid" jdbcType="VARCHAR" property="userid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id,employeeid,tel_repacement,userid
+    </sql>
+
+    <!--手动添加-->
+    <select id="listByPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `tel_enc3_a`
+    </select>
+
+    <insert id="insert" parameterType="Object">
+        insert into `tel_enc3_a` (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{id,jdbcType=INTEGER},
+        #{employeeid,jdbcType=VARCHAR},
+        #{telRelacement,jdbcType=VARCHAR},
+        #{userid,jdbcType=VARCHAR}
+        )
+    </insert>
+
+</mapper>
