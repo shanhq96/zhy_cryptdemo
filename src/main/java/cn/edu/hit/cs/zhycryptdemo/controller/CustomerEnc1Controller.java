@@ -27,7 +27,6 @@ public class CustomerEnc1Controller {
 
     @RequestMapping("list")
     public JsonResponse list(final @RequestBody @Validated CustomerListReqVo req, final BindingResult bindingResult) {
-
         JsonResponse res = null;
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);

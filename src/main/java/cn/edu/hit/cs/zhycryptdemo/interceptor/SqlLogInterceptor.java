@@ -10,7 +10,6 @@ import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Properties;
