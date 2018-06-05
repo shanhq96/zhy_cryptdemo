@@ -27,7 +27,7 @@ import java.util.Random;
  * EUROCRYPT'99. URL:
  * <a href="http://www.gemplus.com/smart/rd/publications/pdf/Pai99pai.pdf">http:
  * //www.gemplus.com/smart/rd/publications/pdf/Pai99pai.pdf</a><br>
- *
+ * <p>
  * [2] PaillierUtils cryptosystem from Wikipedia. URL:
  * <a href="http://en.wikipedia.org/wiki/Paillier_cryptosystem">http://en.
  * wikipedia.org/wiki/Paillier_cryptosystem</a>
@@ -64,13 +64,11 @@ public class PaillierUtils {
     /**
      * Constructs an instance of the PaillierUtils cryptosystem.
      *
-     * @param bitLengthVal
-     *            number of bits of modulus
-     * @param certainty
-     *            The probability that the new BigInteger represents a prime
-     *            number will exceed (1 - 2^(-certainty)). The execution time of
-     *            this constructor is proportional to the value of this
-     *            parameter.
+     * @param bitLengthVal number of bits of modulus
+     * @param certainty    The probability that the new BigInteger represents a prime
+     *                     number will exceed (1 - 2^(-certainty)). The execution time of
+     *                     this constructor is proportional to the value of this
+     *                     parameter.
      */
     public PaillierUtils(int bitLengthVal, int certainty) {
         KeyGeneration(bitLengthVal, certainty);
@@ -87,13 +85,11 @@ public class PaillierUtils {
     /**
      * Sets up the public key and private key.
      *
-     * @param bitLengthVal
-     *            number of bits of modulus.
-     * @param certainty
-     *            The probability that the new BigInteger represents a prime
-     *            number will exceed (1 - 2^(-certainty)). The execution time of
-     *            this constructor is proportional to the value of this
-     *            parameter.
+     * @param bitLengthVal number of bits of modulus.
+     * @param certainty    The probability that the new BigInteger represents a prime
+     *                     number will exceed (1 - 2^(-certainty)). The execution time of
+     *                     this constructor is proportional to the value of this
+     *                     parameter.
      */
     public void KeyGeneration(int bitLengthVal, int certainty) {
         bitLength = bitLengthVal;
@@ -102,12 +98,10 @@ public class PaillierUtils {
          * probably prime, with the specified bitLength and certainty.
          */
         // p = new BigInteger(bitLength / 2, certainty, new Random());
-        // p = new BigInteger("68046914030173325108308053401410872030622523381986531890719664888517988060483");
         p = new BigInteger("11");
         // System.out.println(p);
         // q = new BigInteger(bitLength / 2, certainty, new Random());
         q = new BigInteger("13");
-        // q = new BigInteger("86230928732135173671456009775544272778308895450924250977934895222099676822623");
         // System.out.println(q);
         /**
          * encrypted sum: 13786338157259894781045559560071029576391901065145345692460495170109534736517607008281523024863968470956291148897348055758572769665877299290234611577732539913767965684590187089114285098442249976410327791846307195033633947098204055627248715481399249054989147617264362596875058405426502048993957343870191911468
@@ -125,7 +119,7 @@ public class PaillierUtils {
         }
     }
 
-    public static synchronized PaillierUtils getInstance(){
+    public static synchronized PaillierUtils getInstance() {
         if (null == paillierUtils) {
             paillierUtils = new PaillierUtils();
         }
@@ -136,10 +130,8 @@ public class PaillierUtils {
      * Encrypts plaintext m. ciphertext c = g^m * r^n mod n^2. This function
      * explicitly requires random input r to help with encryption.
      *
-     * @param m
-     *            plaintext as a BigInteger
-     * @param r
-     *            random plaintext to help with encryption
+     * @param m plaintext as a BigInteger
+     * @param r random plaintext to help with encryption
      * @return ciphertext as a BigInteger
      */
     public BigInteger Encryption(final BigInteger m, final BigInteger r) {
@@ -150,8 +142,7 @@ public class PaillierUtils {
      * Encrypts plaintext m. ciphertext c = g^m * r^n mod n^2. This function
      * automatically generates random input r (to help with encryption).
      *
-     * @param m
-     *            plaintext as a BigInteger
+     * @param m plaintext as a BigInteger
      * @return ciphertext as a BigInteger
      */
     public BigInteger Encryption(final BigInteger m) {
@@ -164,8 +155,7 @@ public class PaillierUtils {
      * Decrypts ciphertext c. plaintext m = L(c^lambda mod n^2) * u mod n, where
      * u = (L(g^lambda mod n^2))^(-1) mod n.
      *
-     * @param c
-     *            ciphertext as a BigInteger
+     * @param c ciphertext as a BigInteger
      * @return plaintext as a BigInteger
      */
     public BigInteger Decryption(final BigInteger c) {
@@ -193,8 +183,7 @@ public class PaillierUtils {
     /**
      * main function
      *
-     * @param str
-     *            intput string
+     * @param str intput string
      */
     public static void main(String[] str) {
         /* instantiating an object of PaillierUtils cryptosystem */
@@ -242,8 +231,8 @@ public class PaillierUtils {
         System.out.println(t2.toString());
         BigInteger t3 = new BigInteger("50");
         System.out.println(t3.toString());
-        // BigInteger et1 = p.Encryption(t1);
-        BigInteger et1 = new BigInteger("3925839048168323076653779224735261812694605855120855471750790800470382283157534912304777099275100639069771120094032618149557957133578222328807610247366914760028577009127181240572285694160389780411070405666134119379550913289448821847336457641386810662568577357664285694965602479860755308331534228102306851784");
+        BigInteger et1 = p.Encryption(t1);
+        // BigInteger et1 = new BigInteger("3925839048168323076653779224735261812694605855120855471750790800470382283157534912304777099275100639069771120094032618149557957133578222328807610247366914760028577009127181240572285694160389780411070405666134119379550913289448821847336457641386810662568577357664285694965602479860755308331534228102306851784");
         System.out.println(et1.toString());
         BigInteger et2 = p.Encryption(t2);
         System.out.println(et2.toString());

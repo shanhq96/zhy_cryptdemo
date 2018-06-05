@@ -2,8 +2,10 @@ package cn.edu.hit.cs.zhycryptdemo.interceptor;
 
 import cn.edu.hit.cs.zhycryptdemo.common.AESUtils;
 import cn.edu.hit.cs.zhycryptdemo.common.PaillierUtils;
+import cn.edu.hit.cs.zhycryptdemo.common.TelReplaceUtils;
 import cn.edu.hit.cs.zhycryptdemo.model.CustomerEnc1;
 import cn.edu.hit.cs.zhycryptdemo.model.EmployeeEnc2;
+import cn.edu.hit.cs.zhycryptdemo.model.TelEnc3A;
 import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeListReqVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
@@ -82,6 +84,12 @@ public class SqlLogInterceptor implements Interceptor {
                     tempParameter.setOutcomeEnc(AESUtils.encrypt(tempParameter.getOutcomeEnc()));
                     parameter = tempParameter;
                 }
+
+                if (originalSql.contains("tel_enc3_a")) {
+                    TelEnc3A tempParameter = (TelEnc3A) parameter;
+                    tempParameter.setTelReplacement(TelReplaceUtils.replaceEnc(tempParameter.getTelReplacement()));
+                    parameter = tempParameter;
+                }
                 break;
             default:
                 break;
@@ -138,6 +146,16 @@ public class SqlLogInterceptor implements Interceptor {
                     );
                     returnValue = customerEnc1List;
                 }
+
+                if (originalSql.contains("tel_enc3_a")) {
+                    List<TelEnc3A> telEnc3AList = (List<TelEnc3A>) returnValue;
+                    telEnc3AList.forEach(o -> {
+                                o.setTelReplacement(TelReplaceUtils.replaceDec(o.getTelReplacement()));
+                            }
+                    );
+                    returnValue = telEnc3AList;
+                }
+
                 break;
             case INSERT:
                 // case UPDATE:

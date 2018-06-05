@@ -23,51 +23,6 @@ public class AESUtils {
         return decrypt(data, KEY);
     }
 
-
-    public static void main(String[] args) throws Exception {
-
-        /**
-         *
-         FieldTypeComment
-         idint(11) NOT NULL
-         employeeid varchar(255) NOT NULL员工id
-         name_encvarchar(255) NOT NULL员工姓名_AES
-         age_encvarchar(255) NOT NULL员工年龄_AES
-         age_hombigint(20) NOT NULL员工年龄_paillier
-         tel_encvarchar(255) NOT NULL员工联系方式_AES
-         idnumber_encvarchar(255) NOT NULL员工身份证号_AES
-         income_encvarchar(255) NOT NULL员工月收入_AES
-         income_hombigint(20) NOT NULL员工月收入_paillier
-         month_encvarchar(255) NOT NULL工作月数_AES
-         month_hombigint(20) NOT NULL工作月数_paillier
-         outcome_encvarchar(255) NOT NULL员工月支出_AES
-         outcome_hombigint(20) NOT NULL员工月支出_paillier
-         userid
-         */
-
-        String employeeid = "1143710110";
-        String name = "zhy";
-        int age = 18;
-        String tel = "18812341234";
-        String idnumber = "230122123412341234";
-        int income = 50;
-        int month = 5;
-        int outcome = 60;
-        String userid = "1";
-        String nameEnc = encrypt(name);
-        String nameDec = decrypt(nameEnc);
-        System.out.println("nameEnc" + nameEnc + " nameDec" + nameDec);
-        System.out.println("name：" + encrypt(name));
-
-        System.out.println("age：" + encrypt(String.valueOf(age)));
-        System.out.println("tel：" + encrypt(tel));
-        System.out.println("idnumber：" + encrypt(idnumber));
-        System.out.println("income：" + encrypt(String.valueOf(income)));
-        System.out.println("month：" + encrypt(String.valueOf(month)));
-        System.out.println("outcome：" + encrypt(String.valueOf(outcome)));
-
-    }
-
     /**
      * 加密
      *
@@ -175,6 +130,13 @@ public class AESUtils {
             result[i] = (byte) (high * 16 + low);
         }
         return result;
+    }
+
+    public static void main(String[] args) {
+        String content = "hello world";
+        String contentEnc = AESUtils.encrypt(content);
+        String contentDec = AESUtils.decrypt(contentEnc);
+        System.out.println(String.format("明文 %s, 密文 %s, 解密结果 %s", content, contentEnc, contentDec));
     }
 
 }
