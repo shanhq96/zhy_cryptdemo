@@ -1,13 +1,10 @@
 package cn.edu.hit.cs.zhycryptdemo.controller;
 
-import cn.edu.hit.cs.zhycryptdemo.service.CustomerEnc1Service;
 import cn.edu.hit.cs.zhycryptdemo.service.EmployeeEnc2Service;
 import cn.edu.hit.cs.zhycryptdemo.utils.ValidUtil;
-import cn.edu.hit.cs.zhycryptdemo.vo.req.CustomerAddReqVo;
-import cn.edu.hit.cs.zhycryptdemo.vo.req.CustomerListReqVo;
 import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeAddReqVo;
+import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeIncreaseSalaryReqVo;
 import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeListReqVo;
-import cn.edu.hit.cs.zhycryptdemo.vo.res.CustomerListResVo;
 import cn.edu.hit.cs.zhycryptdemo.vo.res.EmployeeListResVo;
 import cn.edu.hit.cs.zhycryptdemo.vo.res.JsonResponse;
 import com.alibaba.fastjson.JSONObject;
@@ -48,7 +45,7 @@ public class EmployeeEnc2Controller {
 
 
     @RequestMapping("add")
-    public JsonResponse insert(final @RequestBody @Validated EmployeeAddReqVo req, final BindingResult bindingResult) {
+    public JsonResponse add(final @RequestBody @Validated EmployeeAddReqVo req, final BindingResult bindingResult) {
         JsonResponse res = null;
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);
@@ -60,6 +57,29 @@ public class EmployeeEnc2Controller {
             }
         } finally {
             log.debug("employee.add : req [{}] , res [{}]", JSONObject.toJSONString(req), JSONObject.toJSONString(res));
+        }
+        return res;
+    }
+
+
+    @RequestMapping("salaryIncrease")
+    public JsonResponse increaseSalary(final @RequestBody @Validated EmployeeIncreaseSalaryReqVo req, final BindingResult bindingResult) {
+
+        JsonResponse res = null;
+        try {
+            String validRes = ValidUtil.getErrMsg(bindingResult);
+            if (validRes != null) {
+                res = new JsonResponse<>(validRes);
+            } else {
+                boolean flag = this.employeeEnc2Service.increaseSalary(req);
+                if (flag) {
+                    res = new JsonResponse();
+                } else {
+                    res = new JsonResponse("1", "涨薪失败");
+                }
+            }
+        } finally {
+            log.debug("employee.list : req [{}] , res [{}]", JSONObject.toJSONString(req), JSONObject.toJSONString(res));
         }
         return res;
     }

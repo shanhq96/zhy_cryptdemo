@@ -37,6 +37,8 @@ import java.util.Random;
  */
 public class PaillierUtils {
 
+    private static PaillierUtils paillierUtils;
+
     /**
      * p and q are two large primes. lambda = lcm(p-1, q-1) =
      * (p-1)*(q-1)/gcd(p-1, q-1).
@@ -123,6 +125,13 @@ public class PaillierUtils {
         }
     }
 
+    public static synchronized PaillierUtils getInstance(){
+        if (null == paillierUtils) {
+            paillierUtils = new PaillierUtils();
+        }
+        return paillierUtils;
+    }
+
     /**
      * Encrypts plaintext m. ciphertext c = g^m * r^n mod n^2. This function
      * explicitly requires random input r to help with encryption.
@@ -133,7 +142,7 @@ public class PaillierUtils {
      *            random plaintext to help with encryption
      * @return ciphertext as a BigInteger
      */
-    public BigInteger Encryption(BigInteger m, BigInteger r) {
+    public BigInteger Encryption(final BigInteger m, final BigInteger r) {
         return g.modPow(m, nsquare).multiply(r.modPow(n, nsquare)).mod(nsquare);
     }
 
@@ -145,7 +154,7 @@ public class PaillierUtils {
      *            plaintext as a BigInteger
      * @return ciphertext as a BigInteger
      */
-    public BigInteger Encryption(BigInteger m) {
+    public BigInteger Encryption(final BigInteger m) {
         BigInteger r = new BigInteger(bitLength, new Random());
         return g.modPow(m, nsquare).multiply(r.modPow(n, nsquare)).mod(nsquare);
 
@@ -159,7 +168,7 @@ public class PaillierUtils {
      *            ciphertext as a BigInteger
      * @return plaintext as a BigInteger
      */
-    public BigInteger Decryption(BigInteger c) {
+    public BigInteger Decryption(final BigInteger c) {
         BigInteger u = g.modPow(lambda, nsquare).subtract(BigInteger.ONE).divide(n).modInverse(n);
         return c.modPow(lambda, nsquare).subtract(BigInteger.ONE).divide(n).multiply(u).mod(n);
     }
@@ -174,6 +183,12 @@ public class PaillierUtils {
     public BigInteger cipher_add(BigInteger em1, BigInteger em2) {
         return em1.multiply(em2).mod(nsquare);
     }
+
+    public BigInteger addPlainAndCipher(final BigInteger plain, final BigInteger cipher) {
+        BigInteger plainCipher = paillierUtils.Encryption(plain);
+        return cipher.multiply(plainCipher).mod(nsquare);
+    }
+
 
     /**
      * main function

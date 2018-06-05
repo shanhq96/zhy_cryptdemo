@@ -35,6 +35,13 @@
         </if>
     </select>
 
+    <select id="findById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `employee_enc2`
+        where id = #{id}
+    </select>
+
     <insert id="insert" parameterType="Object">
         insert into `employee_enc2` (
         <include refid="Base_Column_List"/>
@@ -56,5 +63,14 @@
         #{userid,jdbcType=VARCHAR}
         )
     </insert>
+
+    <update id="updateIncome" parameterType="Object">
+        update `employee_enc2`
+        set
+        income_enc=#{incomeEnc},
+        income_hom=#{incomeHom}
+        where
+        id = #{id}
+    </update>
 
 </mapper>

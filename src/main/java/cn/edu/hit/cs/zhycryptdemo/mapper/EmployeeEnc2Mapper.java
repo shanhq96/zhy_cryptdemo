@@ -12,4 +12,8 @@ public interface EmployeeEnc2Mapper {
     List<EmployeeEnc2> listByPage(EmployeeListReqVo req);
 
     int insert(EmployeeEnc2 employeeEnc2);
+
+    EmployeeEnc2 findById(int id);
+
+    int updateIncome(EmployeeEnc2 employeeEnc2);
 }

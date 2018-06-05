@@ -1,7 +1,6 @@
 package cn.edu.hit.cs.zhycryptdemo.vo.res;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -16,7 +15,6 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-@NoArgsConstructor
 public final class JsonResponse<T> {
     /**
      * 返回编码.
@@ -31,6 +29,11 @@ public final class JsonResponse<T> {
      * 返回数据.
      */
     private T data;
+
+    public JsonResponse() {
+        this.errorCode = "0";
+        this.errorMsg = "成功";
+    }
 
     public JsonResponse(String errorCode, String errorMsg) {
         this.errorCode = errorCode;
