@@ -2,6 +2,7 @@ package cn.edu.hit.cs.zhycryptdemo.interceptor;
 
 import cn.edu.hit.cs.zhycryptdemo.common.AESUtils;
 import cn.edu.hit.cs.zhycryptdemo.common.PaillierUtils;
+import cn.edu.hit.cs.zhycryptdemo.model.CustomerEnc1;
 import cn.edu.hit.cs.zhycryptdemo.model.EmployeeEnc2;
 import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeListReqVo;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +55,7 @@ public class SqlLogInterceptor implements Interceptor {
                 }
                 break;
             case INSERT:
-            // case UPDATE:
+                // case UPDATE:
                 if (originalSql.contains("employee_enc2")) {
                     EmployeeEnc2 tempParameter = (EmployeeEnc2) parameter;
                     tempParameter.setNameEnc(AESUtils.encrypt(tempParameter.getNameEnc()));
@@ -67,6 +68,17 @@ public class SqlLogInterceptor implements Interceptor {
                     tempParameter.setMonthHom(PaillierUtils.getInstance().Encryption(new BigInteger(tempParameter.getMonthEnc())));
                     tempParameter.setMonthEnc(AESUtils.encrypt(tempParameter.getMonthEnc()));
                     tempParameter.setOutcomeHom(PaillierUtils.getInstance().Encryption(new BigInteger(tempParameter.getOutcomeEnc())));
+                    tempParameter.setOutcomeEnc(AESUtils.encrypt(tempParameter.getOutcomeEnc()));
+                    parameter = tempParameter;
+                }
+
+                if (originalSql.contains("customer_enc1")) {
+                    CustomerEnc1 tempParameter = (CustomerEnc1) parameter;
+                    tempParameter.setNameEnc(AESUtils.encrypt(tempParameter.getNameEnc()));
+                    tempParameter.setAgeEnc(AESUtils.encrypt(tempParameter.getAgeEnc()));
+                    tempParameter.setTelEnc(AESUtils.encrypt(tempParameter.getTelEnc()));
+                    tempParameter.setIdnumberEnc(AESUtils.encrypt(tempParameter.getIdnumberEnc()));
+                    tempParameter.setIncomeEnc(AESUtils.encrypt(tempParameter.getIncomeEnc()));
                     tempParameter.setOutcomeEnc(AESUtils.encrypt(tempParameter.getOutcomeEnc()));
                     parameter = tempParameter;
                 }
@@ -112,9 +124,23 @@ public class SqlLogInterceptor implements Interceptor {
                     );
                     returnValue = employeeEnc2List;
                 }
+
+                if (originalSql.contains("customer_enc1")) {
+                    List<CustomerEnc1> customerEnc1List = (List<CustomerEnc1>) returnValue;
+                    customerEnc1List.forEach(o -> {
+                                o.setNameEnc(AESUtils.decrypt(o.getNameEnc()));
+                                o.setAgeEnc(AESUtils.decrypt(o.getAgeEnc()));
+                                o.setTelEnc(AESUtils.decrypt(o.getTelEnc()));
+                                o.setIdnumberEnc(AESUtils.decrypt(o.getIdnumberEnc()));
+                                o.setIncomeEnc(AESUtils.decrypt(o.getIncomeEnc()));
+                                o.setOutcomeEnc(AESUtils.decrypt(o.getOutcomeEnc()));
+                            }
+                    );
+                    returnValue = customerEnc1List;
+                }
                 break;
             case INSERT:
-            // case UPDATE:
+                // case UPDATE:
                 break;
             default:
                 break;
