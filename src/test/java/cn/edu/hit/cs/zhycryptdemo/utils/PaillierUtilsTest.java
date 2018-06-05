@@ -1,6 +1,8 @@
 package cn.edu.hit.cs.zhycryptdemo.utils;
 
 import cn.edu.hit.cs.zhycryptdemo.common.PaillierUtils;
+import cn.edu.hit.cs.zhycryptdemo.service.EmployeeEnc2Service;
+import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeListReqVo;
 import org.junit.Test;
 
 import java.math.BigInteger;
@@ -119,6 +121,8 @@ public class PaillierUtilsTest {
     @Test
     public void testAAAA() {
         System.out.println(BigInteger.valueOf(5652).modPow(BigInteger.valueOf(60), BigInteger.valueOf(77).pow(2)));
+        EmployeeEnc2Service employeeEnc2Service = new EmployeeEnc2Service();
+        employeeEnc2Service.sort(new EmployeeListReqVo());
     }
 
 }
