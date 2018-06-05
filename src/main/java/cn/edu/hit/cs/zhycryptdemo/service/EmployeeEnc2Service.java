@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -78,5 +79,38 @@ public class EmployeeEnc2Service {
         int uc = this.employeeEnc2Mapper.updateIncome(employeeEnc2);
         flag = uc > 0;
         return flag;
+    }
+
+    /**
+     * 排序
+     * @param req
+     * @return
+     */
+    public List<EmployeeEnc2> sort(EmployeeListReqVo req) {
+        List<EmployeeEnc2> employeeEnc2List = this.employeeEnc2Mapper.listByPage(req);
+        List<EmployeeEnc2> employeeEnc2ListSorted = employeeEnc2List.stream().sorted(
+                (x, y) -> compareHom(x.getIncomeHom(), y.getIncomeHom())
+        ).collect(Collectors.toList());
+        return employeeEnc2ListSorted;
+    }
+
+    private int compareHom(BigInteger xHom, BigInteger yHom) {
+        //if x >= y , return 1
+        // if x < y , return -1
+
+        Random random = new Random(System.currentTimeMillis());
+        BigInteger r1 = new BigInteger(String.valueOf(random.nextInt(String.valueOf(PaillierUtils.getInstance().n).length() / 8) + (String.valueOf(PaillierUtils.getInstance().n).length() / 8)));
+        BigInteger r2 = new BigInteger(String.valueOf(random.nextInt(String.valueOf(PaillierUtils.getInstance().n).length() / 8)));
+        BigInteger x1Hom = xHom.multiply(PaillierUtils.getInstance().Encryption(BigInteger.ONE));
+        BigInteger y1Hom = yHom.pow(2);
+
+        BigInteger lHom = x1Hom.multiply(y1Hom.pow(PaillierUtils.getInstance().n.subtract(BigInteger.ONE).intValue())).pow(r1.intValue()).multiply(PaillierUtils.getInstance().Encryption(r2));
+        BigInteger l = PaillierUtils.getInstance().Decryption(lHom);
+        int u = l.compareTo(PaillierUtils.getInstance().n.divide(BigInteger.valueOf(2))) > 0 ? 1 : 0;
+        if (u == 0) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 }
