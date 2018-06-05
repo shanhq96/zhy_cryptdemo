@@ -6,6 +6,7 @@ import cn.edu.hit.cs.zhycryptdemo.common.TelReplaceUtils;
 import cn.edu.hit.cs.zhycryptdemo.model.CustomerEnc1;
 import cn.edu.hit.cs.zhycryptdemo.model.EmployeeEnc2;
 import cn.edu.hit.cs.zhycryptdemo.model.TelEnc3A;
+import cn.edu.hit.cs.zhycryptdemo.vo.req.CustomerListReqVo;
 import cn.edu.hit.cs.zhycryptdemo.vo.req.EmployeeListReqVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
@@ -50,6 +51,14 @@ public class SqlLogInterceptor implements Interceptor {
             case SELECT:
                 if (originalSql.contains("employee_enc2") && originalSql.contains("where 1=1")) {
                     EmployeeListReqVo tempParameter = (EmployeeListReqVo) parameter;
+                    if (!StringUtils.isEmpty(tempParameter.getName())) {
+                        tempParameter.setName(AESUtils.encrypt(tempParameter.getName()));
+                    }
+                    parameter = tempParameter;
+                }
+
+                if (originalSql.contains("customer_enc1") && originalSql.contains("where 1=1")) {
+                    CustomerListReqVo tempParameter = (CustomerListReqVo) parameter;
                     if (!StringUtils.isEmpty(tempParameter.getName())) {
                         tempParameter.setName(AESUtils.encrypt(tempParameter.getName()));
                     }

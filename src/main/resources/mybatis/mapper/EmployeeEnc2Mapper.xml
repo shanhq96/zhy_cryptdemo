@@ -33,6 +33,9 @@
         <if test="name != null and name != ''" >
             and name_enc LIKE CONCAT('%', #{name}, '%')
         </if>
+        <if test="employeeid != null and employeeid != ''" >
+            and employeeid LIKE CONCAT('%', #{employeeid}, '%')
+        </if>
     </select>
 
     <select id="findById" resultMap="BaseResultMap">

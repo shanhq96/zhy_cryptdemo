@@ -79,7 +79,7 @@ public class EmployeeEnc2Controller {
                 }
             }
         } finally {
-            log.debug("employee.list : req [{}] , res [{}]", JSONObject.toJSONString(req), JSONObject.toJSONString(res));
+            log.debug("employee.salaryIncrease : req [{}] , res [{}]", JSONObject.toJSONString(req), JSONObject.toJSONString(res));
         }
         return res;
     }

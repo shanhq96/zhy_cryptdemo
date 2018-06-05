@@ -24,7 +24,7 @@
         <if test="name != null and name != ''" >
             and name_enc LIKE CONCAT('%', #{name}, '%')
         </if>
-        <if test="incomeMin != null and incomeMin != ''" >
+        <!--<if test="incomeMin != null and incomeMin != ''" >
             and income_enc &gt;= #{incomeMin}
         </if>
         <if test="incomeMax != null and incomeMax != ''" >
@@ -35,7 +35,7 @@
         </if>
         <if test="outcomeMax != null and outcomeMax != ''" >
             and outcome_enc &lt;= #{outcomeMax}
-        </if>
+        </if>-->
     </select>
 
     <insert id="insert" parameterType="Object">
