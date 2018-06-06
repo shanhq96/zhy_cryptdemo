@@ -30,6 +30,7 @@
         <include refid="Base_Column_List"/>
         from `employee_enc2`
         where 1=1
+        and userid = #{userid}
         <if test="name != null and name != ''" >
             and name_enc LIKE CONCAT('%', #{name}, '%')
         </if>
@@ -74,6 +75,7 @@
         income_hom=#{incomeHom}
         where
         id = #{id}
+        and userid = #{userid}
     </update>
 
 </mapper>

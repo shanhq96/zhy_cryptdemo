@@ -133,7 +133,7 @@ public class AESUtils {
     }
 
     public static void main(String[] args) {
-        String content = "hello world";
+        String content = "12345678900";
         String contentEnc = AESUtils.encrypt(content);
         String contentDec = AESUtils.decrypt(contentEnc);
         System.out.println(String.format("明文 %s, 密文 %s, 解密结果 %s", content, contentEnc, contentDec));

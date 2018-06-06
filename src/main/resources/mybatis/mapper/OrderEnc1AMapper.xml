@@ -21,6 +21,7 @@
         select
         <include refid="Base_Column_List"/>
         from `order_enc1_a`
+        and userid = #{userid}
     </select>
 
     <insert id="insert" parameterType="Object">

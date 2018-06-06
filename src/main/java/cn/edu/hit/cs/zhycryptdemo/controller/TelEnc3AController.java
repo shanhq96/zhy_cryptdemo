@@ -31,7 +31,7 @@ public class TelEnc3AController {
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);
             if (validRes != null) {
-                res = new JsonResponse<>(validRes);
+                res = new JsonResponse<>("1", validRes);
             } else {
                 List<TelListResVo> telListResVoList = this.telEnc3AService.listByPage(req);
                 res = new JsonResponse(telListResVoList);
@@ -49,7 +49,7 @@ public class TelEnc3AController {
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);
             if (validRes != null) {
-                res = new JsonResponse<>(validRes);
+                res = new JsonResponse<>("1", validRes);
             } else {
                 int ic = this.telEnc3AService.insert(req);
                 res = new JsonResponse(ic);

@@ -17,6 +17,7 @@
         <include refid="Base_Column_List"/>
         from `tel_enc3_a`
         where 1=1
+        and userid = #{userid}
         <if test="employeeid != null and employeeid != ''" >
             and employeeid = #{employeeid}
         </if>

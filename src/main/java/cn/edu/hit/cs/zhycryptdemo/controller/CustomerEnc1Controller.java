@@ -31,7 +31,7 @@ public class CustomerEnc1Controller {
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);
             if (validRes != null) {
-                res = new JsonResponse<>(validRes);
+                res = new JsonResponse<>("1", validRes);
             } else {
                 List<CustomerListResVo> customerListResVoList = this.customerEnc1Service.listByPage(req);
                 res = new JsonResponse(customerListResVoList);
@@ -49,7 +49,7 @@ public class CustomerEnc1Controller {
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);
             if (validRes != null) {
-                res = new JsonResponse<>(validRes);
+                res = new JsonResponse<>("1",validRes);
             } else {
                 int ic = this.customerEnc1Service.insert(req);
                 res = new JsonResponse(ic);

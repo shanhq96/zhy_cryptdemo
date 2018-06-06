@@ -32,7 +32,7 @@ public class EmployeeEnc2Controller {
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);
             if (validRes != null) {
-                res = new JsonResponse<>(validRes);
+                res = new JsonResponse<>("1", validRes);
             } else {
                 List<EmployeeListResVo> employeeListResVoList = this.employeeEnc2Service.listByPage(req);
                 res = new JsonResponse(employeeListResVoList);
@@ -50,7 +50,7 @@ public class EmployeeEnc2Controller {
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);
             if (validRes != null) {
-                res = new JsonResponse<>(validRes);
+                res = new JsonResponse<>("1", validRes);
             } else {
                 int ic = this.employeeEnc2Service.insert(req);
                 res = new JsonResponse(ic);
@@ -69,7 +69,7 @@ public class EmployeeEnc2Controller {
         try {
             String validRes = ValidUtil.getErrMsg(bindingResult);
             if (validRes != null) {
-                res = new JsonResponse<>(validRes);
+                res = new JsonResponse<>("1", validRes);
             } else {
                 boolean flag = this.employeeEnc2Service.increaseSalary(req);
                 if (flag) {

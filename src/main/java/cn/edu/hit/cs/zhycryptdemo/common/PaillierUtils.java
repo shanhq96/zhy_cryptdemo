@@ -277,7 +277,7 @@ public class PaillierUtils {
         System.out.println("--------------------------------");
 
 
-        BigInteger m3 = new BigInteger("40");
+        BigInteger m3 = new BigInteger("18");
         BigInteger em3 = paillierUtils.Encryption(m3);
         BigInteger dm3 = paillierUtils.Decryption(em3);
         System.out.println(String.format("m3 %s, em3 %s, dm3 %s", m3, em3, dm3));
